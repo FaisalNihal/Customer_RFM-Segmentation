@@ -159,6 +159,7 @@ select distinct TERRITORY from sales_data;
 | APAC      |
 | Japan     |
 
+
 ## RFM_ANALYSIS
 **This SQL query calculates the RFM (Recency, Frequency, Monetary) values for each customer in the dataset**
 ```sql
@@ -174,7 +175,8 @@ group by `CUSTOMERNAME`
 |Toys4GrownUps.com       |104562  |30       |139    |
 |Corporate Gift Ideas Co.|149882  |41       |97     |
 
-**This SQL code creates a view named RFM_SEGMENT, which calculates the RFM (Recency, Frequency, Monetary) scores and combines them into a single RFM category combination for each customer and assigns a customer segment label based on their RFM category combination**
+
+**This SQL code creates a view named SEGMENT_RFM, which calculates the RFM (Recency, Frequency, Monetary) scores and combines them into a single RFM category combination for each customer and assigns a customer segment label based on their RFM category combination**
 ```sql
 create view Segment_RFM as
 with RFM AS (With Rf as(with R as(select `CUSTOMERNAME`,round(sum(`Sales`),0) as Monetary,count(`ORDERNUMBER`) as frequency,timestampdiff(day,(select max(`ORDERDATE.1`)from `sales_data`),max(`ORDERDATE.1`))*-1 as recency from `sales_data`
@@ -210,6 +212,7 @@ case when concat_ in ('111','211','121')  then 'Churned Customers'
 |Saveley & Henriot, Co.  |142874  |41       |455    |4   |4  |1  |441    |9        |Hibernating        |
 |CAF Imports             |49642   |13       |438    |1   |1  |1  |111    |3        |Churned Customers  |
 
+
 ## Distinct Customer Category ##
 ``` sql
 select distinct Customer_category from `segment_rfm`;
@@ -224,6 +227,7 @@ select distinct Customer_category from `segment_rfm`;
 |At Risk                 |
 |Champions               |
 |Promising               |
+
 
 ## Category wise customer number ##
 ```sql
