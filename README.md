@@ -18,7 +18,7 @@ RFM segmentation is widely used in industries like retail, e-commerce, and autom
 In the context of **car sales**, RFM segmentation can help dealerships and manufacturers understand customer behavior, target frequent buyers with exclusive offers, and re-engage customers who haven't made a purchase recently.
 
 ## Create Database 
-
+```sql
 create database if not exists rfm_segmentation;
 use `rfm_segmentation`;
 
@@ -50,7 +50,7 @@ CREATE TABLE if not exists`sales_data` (
   `CONTACTLASTNAME` text,
   `CONTACTFIRSTNAME` text,
   `DEALSIZE` text);
-  
+  ```
   ## Load Data in table 
   LOAD DATA INFILE 'C:\Users\Admin\Downloads\Sales Data for RFM Segmentation.csv' 
 INTO TABLE `sales_data`
