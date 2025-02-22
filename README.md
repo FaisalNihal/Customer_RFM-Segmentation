@@ -51,14 +51,15 @@ CREATE TABLE if not exists`sales_data` (
   `CONTACTFIRSTNAME` text,
   `DEALSIZE` text);
   ```
-  ## Load Data in table 
+  ## Load Data in table
+  ```sql
   LOAD DATA INFILE 'C:\Users\Admin\Downloads\Sales Data for RFM Segmentation.csv' 
 INTO TABLE `sales_data`
 FIELDS TERMINATED BY ',' 
 ENCLOSED BY '"' 
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
-
+```
 ## Dataset Exploration
 
 ```sql
@@ -74,7 +75,7 @@ SELECT * FROM sales_data LIMIT 5;
 | 10159       | 49.00            | 100.00    | 14               | 5205.27 | 10/10/03  | Shipped | 4      | 10       | 2003    | Motorcycles | 95   | S10_1678    | Corporate Gift Ideas Co. | 6505551386  | 7734 Strong St.        |              | San Francisco | CA    |            | USA     | NA        | Brown           | Julie            | Medium   |
 
 ```sql
-SELECT COUNT(*) FROM SALES_SAMPLE_DATA;-- 2823
+SELECT COUNT(*) FROM sales_data;-- 2823
 ```
 -- OUTPUT --
 | COUNT(*) |
@@ -83,7 +84,7 @@ SELECT COUNT(*) FROM SALES_SAMPLE_DATA;-- 2823
 
 ## Checking unique values
 ```sql
-select distinct status from SALES_SAMPLE_DATA;
+select distinct status from sales_data;
 ```
 -- OUTPUT --
 | status     |
@@ -96,7 +97,7 @@ select distinct status from SALES_SAMPLE_DATA;
 | Resolved   |
 
 ```sql
-select distinct year_id from SALES_SAMPLE_DATA;
+select distinct year_id from sales_data;
 ```
 -- OUTPUT --
 | year_id |
@@ -106,7 +107,7 @@ select distinct year_id from SALES_SAMPLE_DATA;
 | 2005    |
 
 ```sql
-select distinct PRODUCTLINE from SALES_SAMPLE_DATA;
+select distinct PRODUCTLINE from sales_data;
 ```
 -- OUTPUT --
 | PRODUCTLINE      |
@@ -120,7 +121,7 @@ select distinct PRODUCTLINE from SALES_SAMPLE_DATA;
 | Trains           |
 
 ```sql
-select distinct COUNTRY from SALES_SAMPLE_DATA;
+select distinct COUNTRY from sales_data;
 ```
 -- OUTPUT --
 | COUNTRY     |
@@ -145,18 +146,10 @@ select distinct COUNTRY from SALES_SAMPLE_DATA;
 | Switzerland |
 | Ireland     |
 
-```sql
-select distinct DEALSIZE from SALES_SAMPLE_DATA;
-```
--- OUTPUT --
-| DEALSIZE |
-|----------|
-| Small    |
-| Medium   |
-| Large    |
+
 
 ```sql
-select distinct TERRITORY from SALES_SAMPLE_DATA;
+select distinct TERRITORY from sales_data;
 ```
 -- OUTPUT --
 | TERRITORY |
