@@ -17,49 +17,52 @@ RFM segmentation is widely used in industries like retail, e-commerce, and autom
 
 In the context of **car sales**, RFM segmentation can help dealerships and manufacturers understand customer behavior, target frequent buyers with exclusive offers, and re-engage customers who haven't made a purchase recently.
 
-Would you like me to refine this further or add more details? 🚀
+## Create Database 
 
+create database if not exists rfm_segmentation;
+use `rfm_segmentation`;
 
-## Database Setup
-
-- Create a database named `rfm_segmentation`.
-```sql
-CREATE DATABASE IF NOT EXISTS RFM_SALES;
-USE RFM_SALES;
-CREATE TABLE SALES_SAMPLE_DATA (
-    ORDERNUMBER INT(8),
-    QUANTITYORDERED DECIMAL(8,2),
-    PRICEEACH DECIMAL(8,2),
-    ORDERLINENUMBER INT(3),
-    SALES DECIMAL(8,2),
-    ORDERDATE VARCHAR(16),
-    STATUS VARCHAR(16),
-    QTR_ID INT(1),
-    MONTH_ID INT(2),
-    YEAR_ID INT(4),
-    PRODUCTLINE VARCHAR(32),
-    MSRP INT(8),
-    PRODUCTCODE VARCHAR(16),
-    CUSTOMERNAME VARCHAR(64),
-    PHONE VARCHAR(32),
-    ADDRESSLINE1 VARCHAR(64),
-    ADDRESSLINE2 VARCHAR(64),
-    CITY VARCHAR(16),
-    STATE VARCHAR(16),
-    POSTALCODE VARCHAR(16),
-    COUNTRY VARCHAR(24),
-    TERRITORY VARCHAR(24),
-    CONTACTLASTNAME VARCHAR(16),
-    CONTACTFIRSTNAME VARCHAR(16),
-    DEALSIZE VARCHAR(10)
-);
-```
-- Import wizard data
+-- Create Sales table in Database --
+ 
+CREATE TABLE if not exists`sales_data` (
+  `ORDERNUMBER` int DEFAULT NULL,
+  `QUANTITYORDERED` int DEFAULT NULL,
+  `PRICEEACH` double DEFAULT NULL,
+  `ORDERLINENUMBER` int DEFAULT NULL,
+  `SALES` double DEFAULT NULL,
+  `ORDERDATE.1` text,
+  `STATUS` text,
+  `QTR_ID` int DEFAULT NULL,
+  `MONTH_ID` int DEFAULT NULL,
+  `YEAR_ID` int DEFAULT NULL,
+  `PRODUCTLINE` text,
+  `MSRP` int DEFAULT NULL,
+  `PRODUCTCODE` text,
+  `CUSTOMERNAME` text,
+  `PHONE` text,
+  `ADDRESSLINE1` text,
+  `ADDRESSLINE2` text,
+  `CITY` text,
+  `STATE` text,
+  `POSTALCODE` text,
+  `COUNTRY` text,
+  `TERRITORY` text,
+  `CONTACTLASTNAME` text,
+  `CONTACTFIRSTNAME` text,
+  `DEALSIZE` text);
+  
+  ## Load Data in table 
+  LOAD DATA INFILE 'C:\Users\Admin\Downloads\Sales Data for RFM Segmentation.csv' 
+INTO TABLE `sales_data`
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
 ## Dataset Exploration
 
 ```sql
-SELECT * FROM SALES_SAMPLE_DATA LIMIT 5;
+SELECT * FROM sales_data LIMIT 5;
 ```
 -- OUTPUT --
 | ORDERNUMBER | QUANTITYORDERED | PRICEEACH | ORDERLINENUMBER | SALES   | ORDERDATE | STATUS  | QTR_ID | MONTH_ID | YEAR_ID | PRODUCTLINE | MSRP | PRODUCTCODE | CUSTOMERNAME          | PHONE       | ADDRESSLINE1            | ADDRESSLINE2 | CITY          | STATE | POSTALCODE | COUNTRY | TERRITORY | CONTACTLASTNAME | CONTACTFIRSTNAME | DEALSIZE |
