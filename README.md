@@ -158,3 +158,88 @@ select distinct TERRITORY from sales_data;
 | EMEA      |
 | APAC      |
 | Japan     |
+
+## RFM_ANALYSIS
+**This SQL query calculates the RFM (Recency, Frequency, Monetary) values for each customer in the dataset**
+```sql
+select `CUSTOMERNAME`,round(sum(`Sales`),0) as Monetary,count(`ORDERNUMBER`) as frequency,timestampdiff(day,(select max(`ORDERDATE.1`)from `sales_data`),max(`ORDERDATE.1`))*-1 as recency from `sales_data`
+group by `CUSTOMERNAME`
+```
+--Output--
+|CUSTOMERNAME            |Monetary|frequency|recency|
+|------------------------|--------|---------|-------|
+|Land of Toys Inc.       |164069  |49       |197    |
+|Reims Collectables      |135043  |41       |62     |
+|Lyon Souveniers         |78570   |20       |75     |
+|Toys4GrownUps.com       |104562  |30       |139    |
+|Corporate Gift Ideas Co.|149882  |41       |97     |
+
+**This SQL code creates a view named RFM_SEGMENT, which calculates the RFM (Recency, Frequency, Monetary) scores and combines them into a single RFM category combination for each customer and assigns a customer segment label based on their RFM category combination**
+```sql
+create view Segment_RFM as
+with RFM AS (With Rf as(with R as(select `CUSTOMERNAME`,round(sum(`Sales`),0) as Monetary,count(`ORDERNUMBER`) as frequency,timestampdiff(day,(select max(`ORDERDATE.1`)from `sales_data`),max(`ORDERDATE.1`))*-1 as recency from `sales_data`
+group by `CUSTOMERNAME`)
+select *, 
+ntile(4) over (order by Monetary asc) as mone,
+ntile(4) over (order by frequency asc) as fre,
+ntile(4) over (order by recency desc) as rec,
+concat(ntile(4) over (order by Monetary asc),ntile(4) over (order by frequency asc),ntile(4) over (order by recency desc)) as concat_,
+(ntile(4) over (order by Monetary asc)+ntile(4) over (order by frequency asc)+ntile(4) over (order by recency desc)) as Total_sum 
+from R)
+select *,
+case when concat_ in ('111','211','121')  then 'Churned Customers'
+ when concat_ in ('112','212','441','341','331')  then 'Hibernating' 
+ when  concat_ in ('113','114','122','123','124','131','132','133','141','142','422','242')   then 'At Risk'
+ when concat_ in ('213','214','221','222','223','144','143','134','432')   then 'Potential Loyalists' 
+ when concat_ in ('224','231','232','233','234','321','322',244)   then 'Loyal Customers' 
+ when concat_ in ('311','312','313',413,'442')  then 'Promising' 
+ when concat_ in ('314','323','324','332','333','334','342','343','344','444','443','434')   then 'Champions' 
+ else 'Others' end AS `Customer_category` from Rf)
+ 
+ select  * from RFM;
+```
+--output--
+|CUSTOMERNAME            |Monetary|frequency|recency|mone|fre|rec|concat_|Total_sum|Customer_category  |
+|------------------------|--------|---------|-------|----|---|---|-------|---------|-------------------|
+|Men 'R' US Retailers, Ltd.|48048   |14       |508    |1   |1  |1  |111    |3        |Churned Customers  |
+|Double Decker Gift Stores, Ltd|36019   |12       |495    |1   |1  |1  |111    |3        |Churned Customers  |
+|West Coast Collectables Co.|46085   |13       |488    |1   |1  |1  |111    |3        |Churned Customers  |
+|Signal Collectibles Ltd.|50219   |15       |476    |1   |1  |1  |111    |3        |Churned Customers  |
+|Daedalus Designs Imports|69052   |20       |465    |1   |2  |1  |121    |4        |Churned Customers  |
+|Collectable Mini Designs Co.|87489   |25       |460    |3   |2  |1  |321    |6        |Loyal Customers    |
+|Saveley & Henriot, Co.  |142874  |41       |455    |4   |4  |1  |441    |9        |Hibernating        |
+|CAF Imports             |49642   |13       |438    |1   |1  |1  |111    |3        |Churned Customers  |
+
+## Distinct Customer Category ##
+``` sql
+select distinct Customer_category from `segment_rfm`;
+```
+--Output--
+|Customer_category       |
+|------------------------|
+|Churned Customers       |
+|Loyal Customers         |
+|Hibernating             |
+|Potential Loyalists     |
+|At Risk                 |
+|Champions               |
+|Promising               |
+
+## Category wise customer number ##
+```sql
+select  Customer_category, count(`CUSTOMERNAME`) from `segment_rfm` 
+ group by Customer_category;
+```
+--Output--
+|Customer_category       |Customer_Number|
+|------------------------|---------------------|
+|Churned Customers       |15                   |
+|Loyal Customers         |12                   |
+|Hibernating             |8                    |
+|Potential Loyalists     |12                   |
+|At Risk                 |8                    |
+|Champions               |33                   |
+|Promising               |4                    |
+
+
+
